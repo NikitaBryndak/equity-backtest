@@ -43,4 +43,5 @@ class BaseStrategy:
         """
         raise NotImplementedError("Implement generate_signals() before using it.")
         
-    
+    def __str__(self):
+        return "Templete Strategy"
