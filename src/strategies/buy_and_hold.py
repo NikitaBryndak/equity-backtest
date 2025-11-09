@@ -50,4 +50,4 @@ class BuyAndHoldStrategy:
         return df
         
     def __str__(self):
-        return "Template Strategy"
+        return "Buy And Hold Strategy"

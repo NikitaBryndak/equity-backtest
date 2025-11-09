@@ -63,4 +63,4 @@ class TrendFollowingStrategy(BaseStrategy):
         return df
         
     def __str__(self):
-        return "Templete Strategy"
+        return "Trend Following Strategy"
