@@ -1,11 +1,8 @@
-from .data_pipeline import load_data
+from .data_pipeline import DataLoader
 from .engine.backtester import Backtester
 from .strategies import *
 
 __all__ = [
-	"load_data",
+	"DataLoader",
 	"Backtester",
-	"BaseStrategy",
-	"TrendFollowingStrategy",
-	"MeanReversionStrategy",
 ]

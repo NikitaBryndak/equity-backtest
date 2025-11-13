@@ -21,6 +21,9 @@ class BaseStrategy:
                 return df
     """
 
+    def __init__(self) -> None:
+        pass
+    
     def generate_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Generate and return feature columns for df.
 

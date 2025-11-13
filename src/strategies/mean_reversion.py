@@ -1,3 +1,5 @@
+import pandas as pd
+
 from .base_strategy import BaseStrategy
 
 class MeanReversionStrategy(BaseStrategy):
@@ -41,38 +43,31 @@ class MeanReversionStrategy(BaseStrategy):
         >>> df = strategy.generate_features(df)   # adds SMA_20 and SMA_50
         >>> df = strategy.generate_signals(df)    # adds/updates 'Signal' column
     """
-    
+
 
     def __init__(self, short_window=30, long_window=100):
         self.short_window = short_window
         self.long_window = long_window
         
-    def generate_features(self, df):
+    def generate_features(self, df) -> pd.DataFrame:
         print("--- Creating Strategy Features ---")
         df[f'SMA_{self.short_window}'] = df['Close'].rolling(self.short_window).mean()
         df[f'SMA_{self.long_window}'] = df['Close'].rolling(self.long_window).mean()
         
         print("--- Strategy Features Created ---")
-        
         return df
     
-    def generate_signals(self, df):
+    def generate_signals(self, df) -> pd.DataFrame:
         print("--- Creating Strategy Signals ---")
         df['Signal'] = 0
         df.loc[df['Close'] < df[f'SMA_{self.long_window}'], 'Signal'] = 1
         df.loc[df['Close'] > df[f'SMA_{self.short_window}'], 'Signal'] = -1
         
         print("--- Strategy Signals Created ---")
-        
         return df
     
     def __str__(self):
-        print_data = []
-        print_data.append("------------------------")
-        print_data.append("Mean Reversion Strategy")
-        print_data.append("------------------------")
-        print_data.append("LONG STRATEGY DESCRIPTION")
-        print_data.append("------------------------")
-
-        
-        return "\n".join(print_data)
+        return (
+            "Mean Reversion Strategy "
+            f"(short_window={self.short_window}, long_window={self.long_window})"
+        )
