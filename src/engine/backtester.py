@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-from strategies import BaseStrategy
+from src.strategies import BaseStrategy
 
 class Backtester:
     def __init__(self, df: pd.DataFrame, strategies: List[BaseStrategy], initial_capital=10000.0, fee=0.001):
