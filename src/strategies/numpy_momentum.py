@@ -28,19 +28,9 @@ class MomentumStrategy(BaseStrategy):
 
     def generate_features(self, df: pd.DataFrame) -> pd.DataFrame:
         print("--- Creating Strategy Features ---")
-        if "Close" not in df:
-            raise KeyError("DataFrame must contain a Close column")
 
         price_series = df["Close"].astype(float).replace([np.inf, -np.inf], np.nan).ffill().bfill()
         prices = price_series.to_numpy()
-
-        if prices.size == 0:
-            empty = np.array([], dtype=float)
-            df["LogReturn"] = empty
-            df["SmoothedReturn"] = empty
-            df["Momentum"] = empty
-            print("--- Strategy Features Created ---")
-            return df
 
         safe_prices = np.clip(prices, a_min=1e-8, a_max=None)
         log_prices = np.log(safe_prices)
