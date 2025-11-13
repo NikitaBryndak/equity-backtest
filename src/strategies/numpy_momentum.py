@@ -5,7 +5,7 @@ from .base_strategy import BaseStrategy
 
 
 class MomentumStrategy(BaseStrategy):
-    """Toy momentum strategy that smooths log returns with SciPy."""
+    """Momentum strategy using log return smoothing with moving average filtering."""
 
     def __init__(self, window: int = 11, poly: int = 2, threshold: float = 0.05) -> None:
         if window < 3:
@@ -38,7 +38,7 @@ class MomentumStrategy(BaseStrategy):
             empty = np.array([], dtype=float)
             df["LogReturn"] = empty
             df["SmoothedReturn"] = empty
-            df["ToyMomentum"] = empty
+            df["Momentum"] = empty
             print("--- Strategy Features Created ---")
             return df
 
@@ -55,21 +55,21 @@ class MomentumStrategy(BaseStrategy):
             smoothed[: window - 1] = np.nan
 
         rolling_std = pd.Series(log_returns).rolling(window, min_periods=window).std(ddof=0).to_numpy()
-        toy_momentum = np.divide(smoothed, rolling_std + 1e-4)
+        momentum = np.divide(smoothed, rolling_std + 1e-4)
 
         df["LogReturn"] = log_returns
         df["SmoothedReturn"] = smoothed
-        df["ToyMomentum"] = np.nan_to_num(toy_momentum, nan=0.0, posinf=0.0, neginf=0.0)
+        df["Momentum"] = np.nan_to_num(momentum, nan=0.0, posinf=0.0, neginf=0.0)
 
         print("--- Strategy Features Created ---")
         return df
 
     def generate_signals(self, df: pd.DataFrame) -> pd.DataFrame:
         print("--- Creating Strategy Signals ---")
-        if "ToyMomentum" not in df:
-            raise KeyError("Missing ToyMomentum column; call generate_features first")
+        if "Momentum" not in df:
+            raise KeyError("Missing Momentum column; call generate_features first")
 
-        momentum = np.nan_to_num(df["ToyMomentum"].to_numpy(), nan=0.0)
+        momentum = np.nan_to_num(df["Momentum"].to_numpy(), nan=0.0)
         signal = np.zeros_like(momentum, dtype=int)
         signal[momentum > self.threshold] = 1
         signal[momentum < -self.threshold] = -1
@@ -81,4 +81,4 @@ class MomentumStrategy(BaseStrategy):
         return df
 
     def __str__(self) -> str:
-        return f"Toy SciPy Momentum Strategy (window={self.window}, poly={self.poly}, threshold={self.threshold})"
+        return f"Momentum Strategy (window={self.window}, poly={self.poly}, threshold={self.threshold})"
