@@ -4,6 +4,7 @@ from .mean_reversion import MeanReversionStrategy
 from .buy_and_hold import BuyAndHoldStrategy
 from .xgboost import XGBoostStrategy
 from .numpy_momentum import MomentumStrategy
+from .cpp_strategy import CppStrategy
 
 __all__ = [
 	"BaseStrategy",
@@ -11,5 +12,6 @@ __all__ = [
 	"MeanReversionStrategy",
 	"BuyAndHoldStrategy",
 	"XGBoostStrategy",
-	"MomentumStrategy"
+	"MomentumStrategy",
+	"CppStrategy"
 ]
